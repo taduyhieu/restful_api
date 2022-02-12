@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,8 +12,10 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+		
+		protected $dates = ['deleted_at'];
+		protected $table = 'users';
 		const VERIFIED_USER = '1';
 		const UNVERIFIED_USER = '0';
 	
@@ -61,5 +64,13 @@ class User extends Authenticatable
 		
 		public function generateVerificationCode() {
 			return Str::random(40);
+		}
+		
+		public function setNameAttribute($name) {
+			$this->attributes['name'] = strtolower($name);
+		}
+		
+		public function getNameAttribute($name) {
+			return ucwords($name);
 		}
 }
