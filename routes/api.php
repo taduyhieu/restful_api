@@ -8,6 +8,7 @@ use App\Http\Controllers\Buyer\BuyerController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Transaction\TransactionController;
+use App\Http\Controllers\Notification\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,5 @@ Route::resource('sellers', SellerController::class, ['only' => ['index', 'show']
 Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
 Route::resource('products', ProductController::class, ['except' => ['create', 'edit']]);
 Route::resource('transactions', TransactionController::class, ['only' => ['index', 'show']]);
+Route::resource('notifications', NotificationController::class);
 
