@@ -12,6 +12,10 @@
 		
 		const AVAILABLE_PRODUCT = 'available';
 		const UNAVAILABLE_PRODUCT = 'unavailable';
+		protected $hidden = [
+			'pivot'
+		];
+		
 		protected $fillable = [
 			'name',
 			'description',

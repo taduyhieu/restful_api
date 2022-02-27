@@ -26,7 +26,6 @@ class UserController extends ApiController
 				'password' => 'required|min:6|confirmed'
 			];
 			$this->validate($request, $rules);
-			
 			$data = $request->all();
 			
 			$data['password'] = bcrypt($request->password);

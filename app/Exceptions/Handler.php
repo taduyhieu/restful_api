@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Dotenv\Exception\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,8 +37,17 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+			
+	    $this->renderable(function (\Illuminate\Validation\ValidationException $e, $request) {
+//				dd($e);
+		    return response()->json("xxx", 422);
+	    });
+			
+	    $this->renderable(function (NotFoundHttpException $e, $request) {
+				if($e->getPrevious() instanceof ModelNotFoundException) {
+					return response()->json("zzz", 422);
+				}
+		    return response()->json("yyy", 422);
+	    });
     }
 }
