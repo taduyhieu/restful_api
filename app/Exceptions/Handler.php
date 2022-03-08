@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use App\Traits\ApiResponse;
 
 class Handler extends ExceptionHandler
 {
+		use ApiResponse;
     /**
      * A list of the exception types that are not reported.
      *
@@ -39,15 +41,16 @@ class Handler extends ExceptionHandler
     {
 			
 	    $this->renderable(function (\Illuminate\Validation\ValidationException $e, $request) {
-//				dd($e);
-		    return response()->json("xxx", 422);
+		    return $this->errorResponse("xxx", 422);
 	    });
 			
 	    $this->renderable(function (NotFoundHttpException $e, $request) {
+//				dd($e);
 				if($e->getPrevious() instanceof ModelNotFoundException) {
-					return response()->json("zzz", 422);
+					$modelName = strtolower(class_basename($e->getPrevious()->getModel()));
+					return $this->errorResponse("Does not exists any {$modelName} with the specified identificator", 404);
 				}
-		    return response()->json("yyy", 422);
+		    return $this->errorResponse('The specified URL cannot be found', 404);
 	    });
     }
 }

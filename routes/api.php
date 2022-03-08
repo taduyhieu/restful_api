@@ -60,3 +60,5 @@ Route::resource('transactions.sellers', TransactionSellerController::class, ['on
 
 Route::resource('notifications', NotificationController::class);
 
+Route::name('verify')->get(  'users/verify/{token}', [UserController::class, 'verify']);
+Route::name('resend')->get(  'users/{user}/resend', [UserController::class, 'resend']);

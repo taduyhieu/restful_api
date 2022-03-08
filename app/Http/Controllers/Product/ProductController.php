@@ -6,6 +6,7 @@
 	use Illuminate\Http\Request;
 	use App\Services\RedisService;
 	
+	use Storage;
 	use App\Models\Product;
 	
 	class ProductController extends ApiController
@@ -89,71 +90,29 @@
 		 */
 		public function show(Product $product)
 		{
-			$user = $this->redisService->hSet('yyy', 1, "data", 10);
-			return response()->json(['data' => $user], 200);
-//			return $this->showOne($user);
+			dd($product);
+			return $this->showOne($product);
 		}
-//
-//		public function store(Request $request) {
-//			$rules = [
-//				'name' => 'required',
-//				'email' => 'required|email|unique:users',
-//				'password' => 'required|min:6|confirmed'
-//			];
-//			$this->validate($request, $rules);
-//
-//			$data = $request->all();
-//
-//			$data['password'] = bcrypt($request->password);
-//			$data['verified'] = User::UNVERIFIED_USER;
-//			$data['verification_token'] = User::generateVerificationCode();
-//			$data['admin'] = User::REGULAR_USER;
-//
-//			$user = User::create($data);
-//
-//			return response()->json(['data' => $user], 200);
-//		}
-//
-//		public function update(Request $request, User $user)
-//		{
-//			$user->fill($request->only('email', 'name'));
-//			if($user->isClean()){
-//				return response()->json(['error' => 'You need to specify any diff value to update', 'code' => '422'], 422);
-//			}
-//
-//			$rules = [
-//				'email' => 'email|unique:users,email,' . $user->id,
-//				'password' => 'min:6|confirmed',
-//				'admin' => 'in:' . User::ADMIN_USER . ',' . User::REGULAR_USER,
-//			];
-//
-//			$this->validate($request, $rules);
-//
-//			if($request->has('email') && $user->email != $request->email){
-//				$user->verified = User::UNVERIFIED_USER;
-//				$user->verification_token = User::generateVerificationCode();
-//			}
-//
-//			if($request->password) {
-//				$user->password = bcrypt($request->password);
-//			}
-//
-//			if($request->has('admin')) {
-//				if(!$user->isVerified()) {
-//					return response()->json(['error' => 'Only verified users can modify the admin field', 'code' => 409], 409);
-//				}
-//				$user->admin = $request->admin;
-//			}
-//
-//			if(!$user->isDirty()){
-//				return response()->json(['error' => ' You need to specify a diffirent value to update', 'code' =>  422], 422);
-//			}
-//
-//			$user->save();
-//
-//			return response()->json(['data' => $user], 200);
-//		}
-//
+
+		public function store(Request $request) {
+			$data = $request->all();
+			$data['image'] = $request->image->store('path', 'public');
+			$product = Product::create($data);
+			return $this->showOne($product);
+		}
+
+		public function update(Request $request, Product $product)
+		{
+			$product->fill($request->only('name', 'description', 'quantity', 'status', 'seller_id'));
+			if($request->hasFile('image')) {
+				Storage::delete($product->image);
+				$product->image = $request->image->store('path', 'public');
+			}
+			
+			$product->save();
+			return $this->showOne($product);
+		}
+
 		public function destroy ($id) {
 			$product = Product::findOrFail($id);
 			$product->delete();
