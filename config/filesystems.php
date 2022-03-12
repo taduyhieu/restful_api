@@ -42,12 +42,12 @@ return [
             'visibility' => 'public',
         ],
 	    
-		    'images' => [
-			    'driver' => 'local',
-			    'root' => public_path('img'),
-			    'url' => env('APP_URL').'/storage',
-			    'visibility' => 'public',
-		    ],
+	    'images' => [
+		    'driver' => 'local',
+		    'root' => public_path('img'),
+		    'url' => env('APP_URL').'/storage',
+		    'visibility' => 'public',
+	    ],
 
         's3' => [
             'driver' => 's3',
@@ -58,6 +58,7 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+//	        'visibility' => 'public'
         ],
 
     ],
