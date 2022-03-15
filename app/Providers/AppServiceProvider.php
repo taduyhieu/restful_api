@@ -27,14 +27,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-      User::created(function($user) {
-				Mail::to($user)->send(new UserCreated($user));
-      });
+        User::created(function($user) {
+			Mail::to($user)->send(new UserCreated($user));
+        });
 
 	    User::updated(function($user) {
-				if($user->isDirty('email')) {
-					Mail::to($user)->send(new UserMailChanged($user));
-				}
+			if($user->isDirty('email')) {
+				Mail::to($user)->send(new UserMailChanged($user));
+			}
 	    });
     }
 }

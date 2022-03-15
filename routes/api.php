@@ -36,14 +36,19 @@ Route::resource('transactions', 'Transaction\TransactionController', ['only' => 
 Route::resource('transactions.categories', 'Transaction\TransactionCategoryController', ['only' => ['index', 'show']]);
 Route::resource('transactions.sellers', 'Transaction\TransactionSellerController', ['only' => ['index', 'show']]);
 
-Route::resource('notifications', 'NotificationC\NotificationController');
+Route::resource('notifications', 'Notification\NotificationController');
 Route::resource('images', 'Image\ImageController');
 Route::post('create-directory', 'Image\ImageController@createDirectory');
 
 Route::name('verify')->get(  'users/verify/{token}', 'User\UserController@verify');
 Route::name('resend')->get(  'users/{user}/resend', 'User\UserController@resend');
 
+Route::name('login')->post('login', 'User\UserController@login');
 Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => 'admin'], function() {
 //	Route::resource('folders', "FolderController");
+});
+
+Route::group(['middleware' => ['jwt']], function () {
+	Route::get('user-info', 'User\UserController@getUserInfo');
 });
 

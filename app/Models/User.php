@@ -13,14 +13,14 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-		
-		protected $dates = ['deleted_at'];
-		protected $table = 'users';
-		const VERIFIED_USER = '1';
-		const UNVERIFIED_USER = '0';
 	
-		const ADMIN_USER = 'true';
-		const REGULAR_USER = 'false';
+	protected $dates = ['deleted_at'];
+	protected $table = 'users';
+	const VERIFIED_USER = '1';
+	const UNVERIFIED_USER = '0';
+
+	const ADMIN_USER = 'true';
+	const REGULAR_USER = 'false';
     /**
      * The attributes that are mass assignable.
      *
@@ -55,23 +55,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 	
-		public function isVerified() {
-			return $this->verified === USER::VERIFIED_USER;
-		}
-		
-		public function isAdmin() {
-			return $this->admin === USER::ADMIN_USER;
-		}
-		
-		public function generateVerificationCode() {
-			return Str::random(40);
-		}
-		
-		public function setNameAttribute($name) {
-			$this->attributes['name'] = strtolower($name);
-		}
-		
-		public function getNameAttribute($name) {
-			return ucwords($name);
-		}
+	public function isVerified() {
+		return $this->verified === USER::VERIFIED_USER;
+	}
+	
+	public function isAdmin() {
+		return $this->admin === USER::ADMIN_USER;
+	}
+	
+	public function generateVerificationCode() {
+		return Str::random(40);
+	}
+	
+	public function setNameAttribute($name) {
+		$this->attributes['name'] = strtolower($name);
+	}
+	
+	public function getNameAttribute($name) {
+		return ucwords($name);
+	}
 }
